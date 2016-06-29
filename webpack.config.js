@@ -1,24 +1,25 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var AssetsPlugin = require('assets-webpack-plugin');
 var prefix = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
 
 var config = {
 	entry: [
-		'./src/routes',
+		'./src/routes'
 	],
 	output: {
-		path: prefix + '/client/public',
-		filename: '/scripts/' + (process.env.NODE_ENV === 'production' ? '[hash].bundle.js' : 'bundle.js'),
-        chunkFilename: '/scripts/' + (process.env.NODE_ENV === 'production' ? '[hash].[id].chunk.js' : '[id].chunk.js'),
-        publicPath: ''
+		path: path.join(__dirname, prefix + '/client/public'),
+		filename: 'scripts/' + (process.env.NODE_ENV === 'production' ? '[hash].bundle.js' : 'bundle.js'),
+        chunkFilename: 'scripts/' + (process.env.NODE_ENV === 'production' ? '[hash].[id].chunk.js' : '[id].chunk.js'),
+        publicPath: '/',
+        contentBase: './src/client'
 	},
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
-				include: __dirname + '/src',
+				include: path.join(__dirname, 'src'),
 				loaders: ['react-hot', 'babel']
 			},
 			{
@@ -33,7 +34,7 @@ var config = {
 	},
   	resolve: {
   		alias: {
-  			'framework': __dirname + '/src/common'
+  			'framework': path.join(__dirname, 'src/common')
   		},
     	extensions: [
 			'',
@@ -44,7 +45,8 @@ var config = {
     	]
   	},
 	plugins: [
-        new ExtractTextPlugin('/styles/' + (process.env.NODE_ENV === 'production' ? '[contenthash].[name].css' : '[name].css')),
+        new ExtractTextPlugin('styles/' + (process.env.NODE_ENV === 'production' ? '[contenthash].[name].css' : '[name].css')),
+		new AssetsPlugin({fullPath: false})
 	]
 }
 
@@ -58,11 +60,17 @@ if(process.env.NODE_ENV === 'production'){
 		}),
 		new webpack.optimize.DedupePlugin(),
 		new webpack.optimize.OccurrenceOrderPlugin(),
-		new webpack.optimize.UglifyJsPlugin(),
-//    	new HtmlWebpackPlugin({
-  //    		filename: __dirname + '/' + prefix + '/client/index.html',
-    //  		template: __dirname + '/src/server/index.html'
-    //	})
+		new webpack.optimize.UglifyJsPlugin()
+	);
+}
+else {
+	config.entry.unshift(
+		'webpack-dev-server/client?http://localhost:3000',
+		'webpack/hot/only-dev-server'
+	);
+
+	config.plugins.unshift(
+		new webpack.HotModuleReplacementPlugin()
 	)
 }
 
