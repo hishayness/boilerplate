@@ -14,6 +14,9 @@ var server = new WebpackDevServer(webpack(config), {
 	historyApiFallback: true
 });
 
+server.app.set('views', path.join(__dirname, 'src/server/views'));
+server.app.set('view engine', 'pug');
+
 server.app.get('*', function (req, res) {
 	res.render('index', webpackAssets);
 })
