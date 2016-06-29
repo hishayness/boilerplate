@@ -11,7 +11,7 @@ const rootRoute = {
 //			cb(null, require('./app').default)
 //		})
 //	},
-	component: require('./app').default,
+	component: require('framework/app').default,
 	getIndexRoute(nextState, cb) {
 		require.ensure([], (require) => {
 			cb(null, require('./home').default)
