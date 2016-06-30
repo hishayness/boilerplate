@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .tmp
 dump.rdb
-dist
+src/public/scripts
+src/public/styles
 webpack-assets.json
 npm-debug.log
