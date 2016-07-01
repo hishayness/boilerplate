@@ -5,30 +5,35 @@ var compression = require('compression');
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config');
 var WebpackDevServer = require('webpack-dev-server');
-var webpackAssets;
+var webpackAssets = process.env.NODE_ENV === 'production' ? require('./webpack-assets.json') : require('./webpack-assets-dev.json');
 
-var app;
-var server = null;
+var app = express();
 
 const PORT = 3000;
 
-if(process.env.NODE_ENV === 'production'){
-	webpackAssets = require('./webpack-assets.json');
-	app = express();
-}
-else {
-	webpackAssets = require('./webpack-assets-dev.json');
-	server = new WebpackDevServer(webpack(webpackConfig), {
+if(process.env.NODE_ENV !== 'production'){
+
+	var proxy = require('proxy-middleware');
+	var url = require('url');
+
+	app.use('/scripts', proxy(url.parse('http://0.0.0.0:3001/scripts')));
+	app.use('/styles', proxy(url.parse('http://0.0.0.0:3001/styles')));
+
+	var server = new WebpackDevServer(webpack(webpackConfig), {
 		publicPath: webpackConfig.output.publicPath,
 		contentBase: webpackConfig.output.contentBase,
 		hot: true,
+		quiet: true,
+		noInfo: true,
 		stats: {
 	    	colors: true
 	  	},
 		historyApiFallback: true
 	});
 
-	app = server.app;
+	server.listen(3001, function () {
+		console.log('Listening at http://localhost:3001/');
+	});
 }
 
 app.use(compression());
@@ -40,13 +45,6 @@ app.get('*', function (req, res) {
 	res.render('index', webpackAssets);
 })
 
-if(process.env.NODE_ENV === 'production'){
-	app.listen(PORT, function () {
-		console.log('Listening at http://localhost:3000/');
-	});
-}
-else {
-	server.listen(PORT, function () {
-		console.log('Listening at http://localhost:3000/');
-	});
-}
+app.listen(PORT, function () {
+	console.log('Listening at http://localhost:3000/');
+});

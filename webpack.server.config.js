@@ -23,14 +23,15 @@ module.exports = {
 	},
   	resolve: {
   		alias: {
-  			'framework': path.join(__dirname, 'src/common')
+  			'framework': path.join(__dirname, 'src/common'),
+  			'images': path.join(__dirname, 'src/public/images')
   		},
     	extensions: [
 			'',
 			'.css',
 			'.js',
 			'.jsx',
-			'.scss',
+			'.less',
     	]
   	},
 	module: {
@@ -49,7 +50,7 @@ module.exports = {
 			root: process.cwd()
 		}),
 		new webpack.DefinePlugin({
-			"process.env.BROWSER": false
+			'__BROWSER__': false
 		})
 	]
 }

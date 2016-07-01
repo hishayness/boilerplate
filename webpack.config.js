@@ -46,19 +46,25 @@ var config = {
 					path.join(__dirname, 'src/server')
 				],
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-			}
+			},
+//			{
+//				test: /\.(jpe?g|png|gif|svg)$/i,
+//				include: path.join(__dirname, 'src'),
+//				loader: 'url-loader?limit=1000000'
+//			}
 		]
 	},
   	resolve: {
   		alias: {
-  			'framework': path.join(__dirname, 'src/common')
+  			'framework': path.join(__dirname, 'src/common'),
+  			'images': path.join(__dirname, 'src/public/images')
   		},
     	extensions: [
 			'',
 			'.css',
 			'.js',
 			'.jsx',
-			'.scss',
+			'.less',
     	]
   	},
 	plugins: [
@@ -69,19 +75,19 @@ var config = {
 			], {
 			root: process.cwd()
 		}),
-		new AssetsPlugin({ fullPath: false }),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['vendor', 'manifest']
 		}),
         new ExtractTextPlugin('styles/[name].' + (process.env.NODE_ENV === 'production' ? '[contenthash].' : '') + 'css'),
 		new webpack.DefinePlugin({
-			'process.env.BROWSER': true
+			'__BROWSER__': true
 		})
 	]
 }
 
 if(process.env.NODE_ENV === 'production'){
 	config.plugins.unshift(
+		new AssetsPlugin({ fullPath: false, filename: 'webpack-assets.json' }),
 		new webpack.DefinePlugin({
 			'global.GENTLY': false,
 			'process.env.NODE_ENV': '"production"'
@@ -97,11 +103,12 @@ if(process.env.NODE_ENV === 'production'){
 }
 else {
 	config.entry.app.unshift(
-		'webpack-dev-server/client?http://localhost:3000',
+		'webpack-dev-server/client?http://0.0.0.0:3001/assets',
 		'webpack/hot/only-dev-server'
 	);
 
 	config.plugins.unshift(
+//		new AssetsPlugin({ fullPath: false, filename: 'webpack-assets-dev.json' }),
 		new webpack.HotModuleReplacementPlugin()
 	)
 

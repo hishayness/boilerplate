@@ -1,5 +1,5 @@
-if(process.env.BROWSER === true){
-	require('./style.less')
+if(__BROWSER__){
+	require('./style')
 }
 
 import React, { Component } from 'react'
