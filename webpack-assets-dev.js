@@ -1,0 +1,1 @@
+module.exports = {"app":{"js":"scripts/app.js","css":"styles/app.css"},"vendor":{"js":"scripts/vendor.js"},"manifest":{"js":"scripts/manifest.js"}}

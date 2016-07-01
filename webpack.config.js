@@ -16,34 +16,38 @@ var config = {
 		]
 	},
 	output: {
-		path: path.join(__dirname, 'src/public'),
+		path: path.resolve(__dirname, 'src/public/build'),
 		filename: 'scripts/[name].' + (process.env.NODE_ENV === 'production' ? '[chunkhash].' : '') + 'js',
         chunkFilename: 'scripts/' + (process.env.NODE_ENV === 'production' ? '[chunkhash].' : '') + '[id].chunk.js',
-        publicPath: '/',
+        publicPath: '/build/',
         contentBase: './src/public'
 	},
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
-				include: path.join(__dirname, 'src'),
-				loaders: ['react-hot', 'babel'] //TODO - remove react-hot for production
+				include: path.resolve(__dirname, 'src'),
+				loaders: ['react-hot', 'babel'], //TODO - remove react-hot for production
+				exclude: [
+					path.resolve(__dirname, 'src/public'),
+					path.resolve(__dirname, 'src/server')
+				],
 			},
 			{
 				test: /\.less$/,
-				include: path.join(__dirname, 'src'),
+				include: path.resolve(__dirname, 'src'),
 				exclude: [
-					path.join(__dirname, 'src/public'),
-					path.join(__dirname, 'src/server')
+					path.resolve(__dirname, 'src/public'),
+					path.resolve(__dirname, 'src/server')
 				],
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
 			},
 			{
 				test: /\.css$/,
-				include: path.join(__dirname, 'src'),
+				include: path.resolve(__dirname, 'src'),
 				exclude: [
-					path.join(__dirname, 'src/public'),
-					path.join(__dirname, 'src/server')
+					path.resolve(__dirname, 'src/public'),
+					path.resolve(__dirname, 'src/server')
 				],
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
 			},
@@ -56,8 +60,8 @@ var config = {
 	},
   	resolve: {
   		alias: {
-  			'framework': path.join(__dirname, 'src/common'),
-  			'images': path.join(__dirname, 'src/public/images')
+  			'framework': path.resolve(__dirname, 'src/common'),
+  			'images': path.resolve(__dirname, 'src/public/images')
   		},
     	extensions: [
 			'',
@@ -69,11 +73,17 @@ var config = {
   	},
 	plugins: [
 		new CleanWebpackPlugin([
-				path.join(__dirname, 'src/public/scripts'),
-				path.join(__dirname, 'src/public/styles'),
-				path.join(__dirname, 'webpack-assets.json')
+				path.join(__dirname, 'src/public/build'),
+				path.join(__dirname, 'webpack-assets.js')
 			], {
 			root: process.cwd()
+		}),
+		new AssetsPlugin({
+			fullPath: false,
+			filename: 'webpack-assets.js',
+			processOutput: function(assets){
+				return 'module.exports = ' + JSON.stringify(assets);
+			}
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['vendor', 'manifest']
@@ -87,7 +97,6 @@ var config = {
 
 if(process.env.NODE_ENV === 'production'){
 	config.plugins.unshift(
-		new AssetsPlugin({ fullPath: false, filename: 'webpack-assets.json' }),
 		new webpack.DefinePlugin({
 			'global.GENTLY': false,
 			'process.env.NODE_ENV': '"production"'
@@ -103,12 +112,11 @@ if(process.env.NODE_ENV === 'production'){
 }
 else {
 	config.entry.app.unshift(
-		'webpack-dev-server/client?http://0.0.0.0:3001/assets',
+		'webpack-dev-server/client?http://0.0.0.0:3001',
 		'webpack/hot/only-dev-server'
 	);
 
 	config.plugins.unshift(
-//		new AssetsPlugin({ fullPath: false, filename: 'webpack-assets-dev.json' }),
 		new webpack.HotModuleReplacementPlugin()
 	)
 

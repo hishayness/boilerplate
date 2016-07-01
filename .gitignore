@@ -5,5 +5,5 @@ dump.rdb
 src/public/scripts
 src/public/styles
 src/server/scripts
-webpack-assets.json
+webpack-assets.js
 npm-debug.log

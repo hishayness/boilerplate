@@ -6,7 +6,7 @@
   "scripts": {
     "build:client": "webpack",
     "build:server": "webpack --config webpack.server.config.js",
-    "start": "npm run build:client && npm run build:server && node src/server/scripts/index.iso.bundle.js"
+    "start": "npm run build:client && npm run build:server && node src/server/scripts/index.bundle.js"
   },
   "author": "",
   "license": "ISC",
