@@ -11,7 +11,7 @@ import url from 'url'
 import render from './render'
 
 const app = express()
-const webpackAssets = process.env.NODE_ENV === 'production' ? require('./webpack-assets') : require('./webpack-assets-dev')
+const webpackAssets = process.env.NODE_ENV === 'production' ? require('./webpack-assets') : require('./webpack-assets-default')
 const PORT = 3000
 
 if(process.env.NODE_ENV !== 'production'){
@@ -37,8 +37,8 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'src/public')));
-app.set('views', path.join(__dirname, 'src/server/views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'pug');
 
 app.get('*', (req, res) => {

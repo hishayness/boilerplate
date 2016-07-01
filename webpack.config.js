@@ -16,39 +16,27 @@ var config = {
 		]
 	},
 	output: {
-		path: path.resolve(__dirname, 'src/public/build'),
+		path: path.resolve(__dirname, 'public/build'),
 		filename: 'scripts/[name].' + (process.env.NODE_ENV === 'production' ? '[chunkhash].' : '') + 'js',
         chunkFilename: 'scripts/' + (process.env.NODE_ENV === 'production' ? '[chunkhash].' : '') + '[id].chunk.js',
         publicPath: '/build/',
-        contentBase: './src/public'
+        contentBase: './public'
 	},
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
 				include: path.resolve(__dirname, 'src'),
-				loaders: ['react-hot', 'babel'], //TODO - remove react-hot for production
-				exclude: [
-					path.resolve(__dirname, 'src/public'),
-					path.resolve(__dirname, 'src/server')
-				],
+				loaders: ['react-hot', 'babel'] //TODO - remove react-hot for production
 			},
 			{
 				test: /\.less$/,
 				include: path.resolve(__dirname, 'src'),
-				exclude: [
-					path.resolve(__dirname, 'src/public'),
-					path.resolve(__dirname, 'src/server')
-				],
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
 			},
 			{
 				test: /\.css$/,
 				include: path.resolve(__dirname, 'src'),
-				exclude: [
-					path.resolve(__dirname, 'src/public'),
-					path.resolve(__dirname, 'src/server')
-				],
 				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
 			},
 //			{
@@ -61,7 +49,7 @@ var config = {
   	resolve: {
   		alias: {
   			'framework': path.resolve(__dirname, 'src/common'),
-  			'images': path.resolve(__dirname, 'src/public/images')
+  			'images': path.resolve(__dirname, 'public/images')
   		},
     	extensions: [
 			'',
@@ -73,7 +61,7 @@ var config = {
   	},
 	plugins: [
 		new CleanWebpackPlugin([
-				path.join(__dirname, 'src/public/build'),
+				path.join(__dirname, 'public/build'),
 				path.join(__dirname, 'webpack-assets.js')
 			], {
 			root: process.cwd()

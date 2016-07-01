@@ -6,7 +6,7 @@ var CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
 	entry: path.resolve(__dirname, 'index.js'),
 	output: {
-		path: './src/server/scripts',
+		path: './server/scripts',
 		filename: 'index.bundle.js'
 	},
 	target: 'node',
@@ -24,7 +24,7 @@ module.exports = {
   	resolve: {
   		alias: {
   			'framework': path.resolve(__dirname, 'src/common'),
-  			'images': path.resolve(__dirname, 'src/public/images')
+  			'images': path.resolve(__dirname, 'public/images')
   		},
     	extensions: [
 			'',
@@ -45,7 +45,7 @@ module.exports = {
 	},
 	plugins: [
 		new CleanWebpackPlugin([
-				path.resolve(__dirname, 'src/server/scripts'),
+				path.resolve(__dirname, 'server/scripts'),
 			], {
 			root: process.cwd()
 		}),
