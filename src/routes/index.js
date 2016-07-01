@@ -1,36 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
-import Router from 'react-router/lib/Router'
-import browserHistory from 'react-router/lib/browserHistory'
+import { match, Router, browserHistory } from 'react-router'
+import routes from './routes'
 
-const rootRoute = {
-	component: 'div',
-	path: '/',
-//	getComponent(nextState, cb) {
-//		require.ensure([], (require) => {
-//			cb(null, require('./app').default)
-//		})
-//	},
-	component: require('framework/app').default,
-	getIndexRoute(nextState, cb) {
-		require.ensure([], (require) => {
-			cb(null, require('./home').default)
-		})
-	},
-//	childRoutes: [
-//		//require('./movies')
-//		require('./movies').default
-//	],
-	getChildRoutes(nextState, cb) {
-		require.ensure([], (require) => {
-			cb(null, [
-				require('./sidecasters').default,
-				require('./sidecasts').default,
-				require('./movies').default
-			])
-		})
-	}
+if(process.env.ISOMORPHIC){
+	match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
+	  render(<Router {...renderProps} />, document.getElementById('app'));
+	});
 }
-
-render(<Router history={browserHistory} routes={rootRoute} />
-, document.getElementById('app'))
+else {
+	render(<Router history={browserHistory} routes={routes} />, document.getElementById('app'))
+}

@@ -1,4 +1,7 @@
-import './style.less'
+if(process.env.BROWSER === true){
+	require('./style.less')
+}
+
 import React from 'react'
 import Navigation from 'framework/navigation'
 

@@ -73,7 +73,10 @@ var config = {
 		new webpack.optimize.CommonsChunkPlugin({
 			names: ['vendor', 'manifest']
 		}),
-        new ExtractTextPlugin('styles/[name].' + (process.env.NODE_ENV === 'production' ? '[contenthash].' : '') + 'css')
+        new ExtractTextPlugin('styles/[name].' + (process.env.NODE_ENV === 'production' ? '[contenthash].' : '') + 'css'),
+		new webpack.DefinePlugin({
+			'process.env.BROWSER': true
+		})
 	]
 }
 
