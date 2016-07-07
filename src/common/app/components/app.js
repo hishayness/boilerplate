@@ -1,8 +1,6 @@
-if(__BROWSER__){
-	require('./style')
-}
-
 import React from 'react'
+import style from './style'
+
 import Navigation from 'framework/navigation'
 
 export default class App extends React.Component {

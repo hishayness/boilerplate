@@ -3,10 +3,8 @@ import style from './style'
 import withStyles from 'src/decorators/withStyles';
 
 @withStyles(style)
-export default class Movies extends Component {
+export default class Button extends Component {
 	render(){
-		return <div className={style.page}>
-			Movies page
-		</div>
+		return <button className={style.button}>{this.props.children}</button>
 	}
 }

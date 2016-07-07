@@ -1,7 +1,11 @@
 var webpack = require('webpack');
 var fs = require('fs')
 var path = require('path')
+
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+var webpackConfigsShared = require('./configs/webpack.shared');
 
 module.exports = {
 	entry: path.resolve(__dirname, 'index.js'),
@@ -21,28 +25,23 @@ module.exports = {
 		__filename: true,
 		__dirname: true
 	},
-  	resolve: {
-  		alias: {
-  			'framework': path.resolve(__dirname, 'src/common'),
-  			'images': path.resolve(__dirname, 'public/images')
-  		},
-    	extensions: [
-			'',
-			'.css',
-			'.js',
-			'.jsx',
-			'.less',
-    	]
-  	},
+  	resolve: webpackConfigsShared.resolve,
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loaders: ['babel'] //TODO - remove react-hot for production
+				loaders: ['babel']
+			},
+			{
+				test: /\.less$/,
+				include: path.resolve(__dirname, 'src'),
+				loader: 'isomorphic-style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!less-loader!postcss-loader'
+
 			}
 		]
 	},
+    postcss: webpackConfigsShared.postcss,
 	plugins: [
 		new CleanWebpackPlugin([
 				path.resolve(__dirname, 'server/scripts'),

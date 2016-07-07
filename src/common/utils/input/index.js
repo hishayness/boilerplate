@@ -3,10 +3,8 @@ import style from './style'
 import withStyles from 'src/decorators/withStyles';
 
 @withStyles(style)
-export default class Movies extends Component {
+export default class Input extends Component {
 	render(){
-		return <div className={style.page}>
-			Movies page
-		</div>
+		return <input className={style.input} type="text" />
 	}
 }

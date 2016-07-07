@@ -18,4 +18,4 @@ class Navigation extends Component {
 	}
 }
 
-module.exports = Navigation
+export default Navigation

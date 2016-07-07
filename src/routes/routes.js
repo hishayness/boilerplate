@@ -1,4 +1,4 @@
-module.exports = ({
+export default {
 	path: '/',
 	component: require('framework/app').default,
 	getIndexRoute(nextState, cb) {
@@ -15,4 +15,4 @@ module.exports = ({
 			])
 		})
 	}
-})
+}

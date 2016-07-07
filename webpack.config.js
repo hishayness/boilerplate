@@ -1,8 +1,11 @@
 var webpack = require('webpack');
 var path = require('path');
+
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var AssetsPlugin = require('assets-webpack-plugin');
+
+var webpackConfigsShared = require('./configs/webpack.shared');
 
 var config = {
 	entry: {
@@ -10,9 +13,13 @@ var config = {
 		vendor: [
 			'react',
 			'react-dom',
+			'redux',
+			'react-redux',
+			'react-router-redux',
 			'react-router/lib/Router',
 			'react-router/lib/Link',
-			'react-router/lib/browserHistory'
+			'react-router/lib/browserHistory',
+			'isomorphic-style-loader/lib/withStyles'
 		]
 	},
 	output: {
@@ -32,12 +39,12 @@ var config = {
 			{
 				test: /\.less$/,
 				include: path.resolve(__dirname, 'src'),
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
+				loader: ExtractTextPlugin.extract("isomorphic-style-loader", "css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!less-loader!postcss-loader")
 			},
 			{
 				test: /\.css$/,
 				include: path.resolve(__dirname, 'src'),
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+				loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
 			},
 //			{
 //				test: /\.(jpe?g|png|gif|svg)$/i,
@@ -46,19 +53,7 @@ var config = {
 //			}
 		]
 	},
-  	resolve: {
-  		alias: {
-  			'framework': path.resolve(__dirname, 'src/common'),
-  			'images': path.resolve(__dirname, 'public/images')
-  		},
-    	extensions: [
-			'',
-			'.css',
-			'.js',
-			'.jsx',
-			'.less',
-    	]
-  	},
+  	resolve: webpackConfigsShared.resolve,
 	plugins: [
 		new CleanWebpackPlugin([
 				path.join(__dirname, 'public/build'),
@@ -80,7 +75,8 @@ var config = {
 		new webpack.DefinePlugin({
 			'__BROWSER__': true
 		})
-	]
+	],
+    postcss: webpackConfigsShared.postcss
 }
 
 if(process.env.NODE_ENV === 'production'){
