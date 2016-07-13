@@ -14,8 +14,9 @@ var AUTOPREFIXER_BROWSERS = [
 module.exports = {
 	resolve: {
 		alias: {
+			'npm': path.resolve(__dirname, '../node_modules'),
 			'server': path.resolve(__dirname, '../server'),
-			'framework': path.resolve(__dirname, '../src/common'),
+			'framework': path.resolve(__dirname, '../src/components'),
 			'src': path.resolve(__dirname, '../src'),
 			'images': path.resolve(__dirname, '../public/images')
 		},

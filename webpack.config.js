@@ -9,7 +9,7 @@ var webpackConfigsShared = require('./configs/webpack.shared');
 
 var config = {
 	entry: {
-		app: ['./src/routes'],
+		app: ['./src/pages'],
 		vendor: [
 			'react',
 			'react-dom',

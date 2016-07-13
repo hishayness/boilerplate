@@ -31,7 +31,7 @@ if(process.env.NODE_ENV !== 'production'){
 	});
 
 	server.listen(3001, function () {
-		console.log('Listening at http://0.0.0.0:3001/');
+		console.log('Listening at http://0.0.0.0:4001/');
 	});
 
 }
@@ -44,5 +44,5 @@ app.set('view engine', 'pug');
 app.get('*', IsoRenderer(webpackAssets))
 
 app.listen(PORT, function () {
-	console.log('Listening at http://localhost:3000/');
+	console.log('Listening at http://localhost:4000/');
 });
